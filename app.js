@@ -7,6 +7,7 @@ if(process.env.NODE_ENV != "production"){
 const express = require("express");
 const app = express();
 const mongoose = require('mongoose');
+const cors = require("cors");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
@@ -20,6 +21,7 @@ const User = require("./models/user.js");
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const UserRouter = require("./routes/user.js");
+const botRouter = require("./routes/bot.js")
 
 //Cloud DB
 const MONGO_URL = process.env.ATLASDB_URL;
@@ -32,12 +34,13 @@ main()
     .catch((err) => console.log(err));
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(MONGO_LOCAL);
 }
 
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
@@ -86,9 +89,11 @@ app.use("/listings/:id/reviews", reviewsRouter);
 
 app.use("/", UserRouter);
 
-app.use((req, res, next) => {
-    next(new ExpressError(404, "Page Not Found"));
-});
+app.use("/",botRouter);
+
+// app.use((req, res, next) => {
+//     next(new ExpressError(404, "Page Not Found"));
+// });
 
 app.use((err, req, res, next) => {
     let { statusCode = 500, message } = err;
