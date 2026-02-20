@@ -33,7 +33,22 @@ function displayBotMessage(message) {
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
+function showTypingIndicator() {
+  const chatBody = document.getElementById("chatBody");
 
+  const typingDiv = document.createElement("div");
+  typingDiv.className = "bot-msg typing";
+  typingDiv.id = "typing-indicator";
+  typingDiv.innerText = ".";
+
+  chatBody.appendChild(typingDiv);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function removeTypingIndicator() {
+  const typingDiv = document.getElementById("typing-indicator");
+  if (typingDiv) typingDiv.remove();
+}
 
 async function sendMessage() {
   console.log("sending msg");
@@ -46,6 +61,8 @@ async function sendMessage() {
   displayUserMessage(message);
   inputElement.value = "";
 
+  showTypingIndicator();
+
   const res = await fetch("http://localhost:8080/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -53,7 +70,8 @@ async function sendMessage() {
   });
 
   const data = await res.json();
-  console.log(data);
+  // console.log(data);
+  removeTypingIndicator();
 
   displayBotMessage(data.reply);
 }

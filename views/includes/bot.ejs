@@ -2,7 +2,7 @@
 
 <div id="chatPanel" class="chat-panel">
   <div class="chat-header">
-    <span>Chatbot</span>
+    <span>Chatbot &nbsp;&nbsp;&nbsp;<i class="fa-brands fa-bots"></i></span>
     <button id="closeChat">✖</button>
   </div>
 
@@ -11,7 +11,8 @@
   </div>
 
   <div class="chat-input">
-    <input type="text" id="userInput" placeholder="Type a message..." />
+    <!-- <input type="text" id="userInput" placeholder="Type a message..." /> -->
+    <textarea id="userInput" rows="1" placeholder="Ask anything about bookings"></textarea>
     <button onclick="sendMessage()" class="snd-btn">Send</button>
   </div>
 </div>
